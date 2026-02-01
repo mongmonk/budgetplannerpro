@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Financial Planner Pro</title>
+    <link rel="icon" href="/icons/icon-192x192.svg">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <script async src="https://unpkg.com/pwacompat" crossorigin="anonymous"></script>
+    <meta name="theme-color" content="#3b82f6">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Source+Code+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['var(--font-family-sans)', 'sans-serif'],
+            },
+            colors: {
+              'primary': {
+                '50': 'rgb(var(--color-primary-50) / <alpha-value>)',
+                '100': 'rgb(var(--color-primary-100) / <alpha-value>)',
+                '200': 'rgb(var(--color-primary-200) / <alpha-value>)',
+                '300': 'rgb(var(--color-primary-300) / <alpha-value>)',
+                '400': 'rgb(var(--color-primary-400) / <alpha-value>)',
+                '500': 'rgb(var(--color-primary-500) / <alpha-value>)',
+                '600': 'rgb(var(--color-primary-600) / <alpha-value>)',
+                '700': 'rgb(var(--color-primary-700) / <alpha-value>)',
+                '800': 'rgb(var(--color-primary-800) / <alpha-value>)',
+                '900': 'rgb(var(--color-primary-900) / <alpha-value>)',
+                '950': 'rgb(var(--color-primary-950) / <alpha-value>)',
+              },
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      /* Paksa skema warna terang untuk input tanggal dalam mode terang untuk memastikan ikon asli berwarna gelap. */
+      html:not(.dark) input[type="date"],
+      html:not(.dark) input[type="month"] {
+        color-scheme: light;
+      }
+      /* Paksa skema warna gelap untuk input tanggal dalam mode gelap untuk memastikan ikon asli berwarna terang. */
+      .dark input[type="date"],
+      .dark input[type="month"] {
+        color-scheme: dark;
+      }
+      /* Gaya scrollbar kustom yang samar */
+      .subtle-scrollbar::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      .subtle-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .subtle-scrollbar::-webkit-scrollbar-thumb {
+        background-color: rgba(148, 163, 184, 0.3); /* slate-400 with opacity */
+        border-radius: 20px;
+        border: 2px solid transparent;
+        background-clip: content-box;
+      }
+      .subtle-scrollbar::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(148, 163, 184, 0.5);
+      }
+
+      /* === FONT & COLOR THEME VARIABLES === */
+      :root {
+        --font-family-sans: 'Inter', sans-serif;
+      }
+      html.font-inter { --font-family-sans: 'Inter', sans-serif; }
+      html.font-lora { --font-family-sans: 'Lora', serif; }
+      html.font-poppins { --font-family-sans: 'Poppins', sans-serif; }
+      html.font-mono { --font-family-sans: 'Source Code Pro', monospace; }
+
+      /* Default to blue */
+      :root, html.accent-blue {
+        --color-primary-50: 239 246 255;
+        --color-primary-100: 219 234 254;
+        --color-primary-200: 191 219 254;
+        --color-primary-300: 147 197 253;
+        --color-primary-400: 96 165 250;
+        --color-primary-500: 59 130 246;
+        --color-primary-600: 37 99 235;
+        --color-primary-700: 29 78 216;
+        --color-primary-800: 30 64 175;
+        --color-primary-900: 30 58 138;
+        --color-primary-950: 23 37 84;
+      }
+      html.accent-emerald {
+        --color-primary-50: 236 253 245;
+        --color-primary-100: 209 250 229;
+        --color-primary-200: 167 243 208;
+        --color-primary-300: 110 231 183;
+        --color-primary-400: 52 211 153;
+        --color-primary-500: 16 185 129;
+        --color-primary-600: 5 150 105;
+        --color-primary-700: 4 120 87;
+        --color-primary-800: 6 95 70;
+        --color-primary-900: 6 78 59;
+        --color-primary-950: 2 44 34;
+      }
+      html.accent-rose {
+        --color-primary-50: 255 241 242;
+        --color-primary-100: 255 228 230;
+        --color-primary-200: 254 205 211;
+        --color-primary-300: 253 164 175;
+        --color-primary-400: 251 113 133;
+        --color-primary-500: 244 63 94;
+        --color-primary-600: 225 29 72;
+        --color-primary-700: 190 18 60;
+        --color-primary-800: 159 18 57;
+        --color-primary-900: 136 19 55;
+        --color-primary-950: 76 5 25;
+      }
+      html.accent-violet {
+        --color-primary-50: 245 243 255;
+        --color-primary-100: 237 233 254;
+        --color-primary-200: 221 214 254;
+        --color-primary-300: 196 181 253;
+        --color-primary-400: 167 139 250;
+        --color-primary-500: 139 92 246;
+        --color-primary-600: 124 58 237;
+        --color-primary-700: 109 40 217;
+        --color-primary-800: 91 33 182;
+        --color-primary-900: 76 29 149;
+        --color-primary-950: 46 16 101;
+      }
+      html.accent-orange {
+        --color-primary-50: 255 247 237;
+        --color-primary-100: 255 237 213;
+        --color-primary-200: 254 215 170;
+        --color-primary-300: 253 186 116;
+        --color-primary-400: 251 146 60;
+        --color-primary-500: 249 115 22;
+        --color-primary-600: 234 88 12;
+        --color-primary-700: 194 65 12;
+        --color-primary-800: 154 52 18;
+        --color-primary-900: 124 45 18;
+        --color-primary-950: 65 22 11;
+      }
+    </style>
+    <style>
+      /* === TEMA MODERN === */
+      /* Latar Belakang & Teks Dasar */
+      html.theme-modern {
+        --tw-bg-opacity: 1;
+        background-color: rgb(241 245 249 / var(--tw-bg-opacity)); /* slate-100 */
+      }
+      html.theme-modern.dark {
+        background-color: rgb(15 23 42 / var(--tw-bg-opacity)); /* slate-900 */
+      }
+      
+      /* Penyesuaian Komponen untuk Tema Modern */
+      /* Kartu */
+      .theme-modern .app-card {
+        border-radius: 1rem; /* lebih bulat */
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05); /* bayangan lebih halus */
+        border-width: 1px;
+        --tw-border-opacity: 1;
+        border-color: rgb(226 232 240 / var(--tw-border-opacity)); /* slate-200 */
+        background-color: #fff;
+      }
+      .theme-modern.dark .app-card {
+        border-color: rgb(51 65 85 / var(--tw-border-opacity)); /* slate-700 */
+        background-color: rgb(30 41 59 / var(--tw-bg-opacity)); /* slate-800 */
+      }
+      
+      /* Tombol */
+      .theme-modern .app-button-primary {
+        border-radius: 9999px; /* bentuk kapsul */
+        font-weight: 600;
+        box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      }
+      .theme-modern .app-button-secondary {
+        border-radius: 9999px;
+      }
+      
+      /* Header */
+      .theme-modern header {
+        box-shadow: none;
+        border-bottom-width: 1px;
+      }
+      
+      /* Animasi Pemuatan Kustom */
+      @keyframes pulse-zoom {
+        0%, 100% {
+          transform: scale(1);
+          opacity: 0.9;
+        }
+        50% {
+          transform: scale(1.05);
+          opacity: 1;
+        }
+      }
+      .animate-pulse-zoom {
+        animation: pulse-zoom 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.27.0",
+    "firebase/": "https://aistudiocdn.com/firebase@^12.4.0/",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "recharts": "https://aistudiocdn.com/recharts@^3.3.0",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-slate-50 dark:bg-slate-900 font-sans">
+    <div id="root"></div>
+    <script type="module" src="index.js"></script>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
