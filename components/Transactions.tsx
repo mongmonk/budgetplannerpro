@@ -17,6 +17,7 @@ export const AddTransactionForm: React.FC<{ onClose: () => void }> = ({ onClose 
     const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
     const [description, setDescription] = useState('');
     const [relatedId, setRelatedId] = useState('');
+    const [walletId, setWalletId] = useState(state.wallets?.[0]?.id || '');
     
     useEffect(() => {
         if (isEditing && editingTransaction) {
@@ -26,6 +27,7 @@ export const AddTransactionForm: React.FC<{ onClose: () => void }> = ({ onClose 
             setDate(t.date.split('T')[0]);
             setDescription(t.description || '');
             setRelatedId(t.relatedId || '');
+            setWalletId(t.walletId || state.wallets?.[0]?.id || '');
 
             if (t.type === 'expense') {
                 switch (t.category) {
@@ -57,7 +59,7 @@ export const AddTransactionForm: React.FC<{ onClose: () => void }> = ({ onClose 
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (amount <= 0 || !date || (type === 'income' && !category) || (type === 'expense' && expenseType === 'Umum' && !category) || (type === 'expense' && expenseType !== 'Umum' && !relatedId)) {
+        if (amount <= 0 || !date || !walletId || (type === 'income' && !category) || (type === 'expense' && expenseType === 'Umum' && !category) || (type === 'expense' && expenseType !== 'Umum' && !relatedId)) {
             alert("Harap isi semua kolom yang wajib diisi.");
             return;
         }
@@ -109,6 +111,7 @@ export const AddTransactionForm: React.FC<{ onClose: () => void }> = ({ onClose 
                 date,
                 description: finalDescription,
                 relatedId: relatedId || undefined,
+                walletId,
             };
 
             setState(prev => {
@@ -117,6 +120,17 @@ export const AddTransactionForm: React.FC<{ onClose: () => void }> = ({ onClose 
 
                 let newGoals = [...prev.goals];
                 let newDebts = [...prev.debts];
+                let newWallets = [...(prev.wallets || [])];
+
+                // Reverse original effect on wallet
+                if (originalTransaction.walletId) {
+                    newWallets = newWallets.map(w => {
+                        if (w.id === originalTransaction.walletId) {
+                            return { ...w, balance: originalTransaction.type === 'income' ? w.balance - originalTransaction.amount : w.balance + originalTransaction.amount };
+                        }
+                        return w;
+                    });
+                }
 
                 if (originalTransaction.type === 'expense' && originalTransaction.relatedId) {
                     if (originalTransaction.category === 'Investasi/Tabungan') {
@@ -134,13 +148,24 @@ export const AddTransactionForm: React.FC<{ onClose: () => void }> = ({ onClose 
                     }
                 }
                 
+                // Apply new effect on wallet
+                if (updatedTransaction.walletId) {
+                    newWallets = newWallets.map(w => {
+                        if (w.id === updatedTransaction.walletId) {
+                            return { ...w, balance: updatedTransaction.type === 'income' ? w.balance + updatedTransaction.amount : w.balance - updatedTransaction.amount };
+                        }
+                        return w;
+                    });
+                }
+                
                 const newTransactions = prev.transactions.map(t => t.id === updatedTransaction.id ? updatedTransaction : t);
 
                 return {
                     ...prev,
                     transactions: newTransactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
                     goals: newGoals,
-                    debts: newDebts
+                    debts: newDebts,
+                    wallets: newWallets
                 };
             });
         } else {
@@ -152,11 +177,22 @@ export const AddTransactionForm: React.FC<{ onClose: () => void }> = ({ onClose 
                 date,
                 description: finalDescription,
                 ...(relatedId && { relatedId }),
+                walletId,
             };
 
             setState(prev => {
                 let newGoals = [...prev.goals];
                 let newDebts = [...prev.debts];
+                let newWallets = [...(prev.wallets || [])];
+
+                if (newTransaction.walletId) {
+                    newWallets = newWallets.map(w => {
+                        if (w.id === newTransaction.walletId) {
+                            return { ...w, balance: newTransaction.type === 'income' ? w.balance + newTransaction.amount : w.balance - newTransaction.amount };
+                        }
+                        return w;
+                    });
+                }
 
                 if (newTransaction.type === 'expense' && newTransaction.relatedId) {
                     if (expenseType === 'Investasi/Tabungan') {
@@ -170,7 +206,8 @@ export const AddTransactionForm: React.FC<{ onClose: () => void }> = ({ onClose 
                     ...prev,
                     transactions: [newTransaction, ...prev.transactions].sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
                     goals: newGoals,
-                    debts: newDebts
+                    debts: newDebts,
+                    wallets: newWallets
                 };
             });
         }
@@ -207,6 +244,14 @@ export const AddTransactionForm: React.FC<{ onClose: () => void }> = ({ onClose 
                 <div>
                     <label htmlFor="date" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Tanggal</label>
                     <input type="date" id="date" value={date} onChange={e => setDate(e.target.value)} required className="block w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm sm:text-sm bg-white dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-primary-500 focus:border-primary-500" />
+                </div>
+
+                <div>
+                    <label htmlFor="walletId" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Pilih Dompet / Akun</label>
+                    <select id="walletId" value={walletId} onChange={e => setWalletId(e.target.value)} required className="block w-full pl-3 pr-10 py-2 text-base border-slate-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md bg-white dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                        <option value="">Pilih Dompet</option>
+                        {state.wallets?.map(w => <option key={w.id} value={w.id}>{w.icon} {w.name} ({formatCurrency(w.balance)})</option>)}
+                    </select>
                 </div>
                 
                 {type === 'income' && (
@@ -366,11 +411,22 @@ export const Transactions: React.FC = () => {
         setState(prev => {
             let newGoals = [...prev.goals];
             let newDebts = [...prev.debts];
+            let newWallets = [...(prev.wallets || [])];
+
+            if (transaction.walletId) {
+                newWallets = newWallets.map(w => {
+                    if (w.id === transaction.walletId) {
+                        return { ...w, balance: transaction.type === 'income' ? w.balance - transaction.amount : w.balance + transaction.amount };
+                    }
+                    return w;
+                });
+            }
+
             if (transaction.type === 'expense' && transaction.relatedId) {
                 if (transaction.category === 'Investasi/Tabungan') newGoals = newGoals.map(g => g.id === transaction.relatedId ? { ...g, currentAmount: (g.currentAmount || 0) - transaction.amount } : g);
                 else if (transaction.category === 'Utang') newDebts = newDebts.map(d => d.id === transaction.relatedId ? { ...d, paidAmount: (d.paidAmount || 0) - transaction.amount } : d);
             }
-            return { ...prev, transactions: prev.transactions.filter(t => t.id !== transaction.id), goals: newGoals, debts: newDebts };
+            return { ...prev, transactions: prev.transactions.filter(t => t.id !== transaction.id), goals: newGoals, debts: newDebts, wallets: newWallets };
         });
     };
     

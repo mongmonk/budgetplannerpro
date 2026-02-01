@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useAppContext } from '../../App';
 import { formatCurrency } from '../../types';
 import { MobileHeader, MobileCard } from './MobileUI';
@@ -7,8 +7,32 @@ export const MobileAssets: React.FC = () => {
     const { state, setIsTransactionModalOpen } = useAppContext();
     const { transactions } = state;
 
-    const totalAssets = transactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0) - 
-                        transactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+    const { totalAssets, liquidAssets, fixedAssets, monthlyRunway, wealthLevel, nextLevelAmount, progressToNext } = useMemo(() => {
+        const walletBalance = (state.wallets || []).reduce((s, w) => s + w.balance, 0);
+        const total = walletBalance;
+        
+        // Breakdown
+        const liquid = walletBalance;
+        const fixed = 0;
+
+        // Runway calculation
+        const last3Months = new Date();
+        last3Months.setMonth(last3Months.getMonth() - 3);
+        const recentExpenses = transactions.filter(t => t.type === 'expense' && new Date(t.date) >= last3Months);
+        const avgMonthlyExpense = recentExpenses.reduce((s, t) => s + t.amount, 0) / 3;
+        const runway = avgMonthlyExpense > 0 ? Math.floor(total / avgMonthlyExpense) : 0;
+
+        // Wealth Level (Mock logic)
+        let level = 'Pemula';
+        let next = 10000000;
+        if (total >= 100000000) { level = 'Mapan'; next = 500000000; }
+        else if (total >= 50000000) { level = 'Aman'; next = 100000000; }
+        else if (total >= 10000000) { level = 'Stabil'; next = 50000000; }
+        
+        const progress = Math.min(Math.round((total / next) * 100), 100);
+
+        return { totalAssets: total, liquidAssets: liquid, fixedAssets: fixed, monthlyRunway: runway, wealthLevel: level, nextLevelAmount: next, progressToNext: progress };
+    }, [transactions]);
 
     const DiamondIcon: React.FC<{className?: string}> = ({className}) => (
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -67,7 +91,7 @@ export const MobileAssets: React.FC = () => {
                         <div>
                             <span className="text-[8px] uppercase tracking-widest text-slate-500 font-bold block">Total Runway</span>
                             <div className="flex items-baseline gap-1">
-                                <span className="text-xl font-bold">6.2</span>
+                                <span className="text-xl font-bold">{monthlyRunway}</span>
                                 <span className="text-[10px] text-slate-500 font-bold">Bulan</span>
                             </div>
                         </div>
@@ -81,12 +105,12 @@ export const MobileAssets: React.FC = () => {
                             </div>
                             <div>
                                 <span className="text-[8px] uppercase tracking-widest text-slate-500 font-bold block">Level Kekayaan</span>
-                                <span className="text-lg font-bold">Bertahan</span>
+                                <span className="text-lg font-bold">{wealthLevel}</span>
                             </div>
                         </div>
                         <div className="text-right">
-                            <span className="text-[8px] uppercase tracking-widest text-slate-500 font-bold block">Level Berikutnya (12x)</span>
-                            <span className="text-sm font-bold text-primary-400">{formatCurrency(39000000)}</span>
+                            <span className="text-[8px] uppercase tracking-widest text-slate-500 font-bold block">Level Berikutnya</span>
+                            <span className="text-sm font-bold text-primary-400">{formatCurrency(nextLevelAmount)}</span>
                         </div>
                     </div>
 
@@ -94,10 +118,10 @@ export const MobileAssets: React.FC = () => {
                     <div className="space-y-2">
                         <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest">
                             <span className="text-slate-500">Progres ke level berikutnya</span>
-                            <span className="text-primary-400">3%</span>
+                            <span className="text-primary-400">{progressToNext}%</span>
                         </div>
                         <div className="bg-slate-800 h-1.5 rounded-full overflow-hidden">
-                            <div className="bg-primary-400 h-full w-[3%] rounded-full"></div>
+                            <div className="bg-primary-400 h-full rounded-full transition-all duration-1000" style={{ width: `${progressToNext}%` }}></div>
                         </div>
                     </div>
 
@@ -117,14 +141,14 @@ export const MobileAssets: React.FC = () => {
                                 <div className="w-2 h-2 rounded-full bg-primary-400"></div>
                                 <span className="text-[8px] uppercase tracking-widest text-slate-500 font-bold">Aset Likuid</span>
                             </div>
-                            <div className="text-sm font-bold">{formatCurrency(0)}</div>
+                            <div className="text-sm font-bold">{formatCurrency(liquidAssets)}</div>
                         </div>
                         <div className="col-span-2 bg-slate-800/40 border border-slate-700/50 rounded-2xl p-4">
                             <div className="flex items-center gap-2 mb-1">
                                 <div className="w-2 h-2 rounded-full bg-blue-400"></div>
                                 <span className="text-[8px] uppercase tracking-widest text-slate-500 font-bold">Aset Tetap</span>
                             </div>
-                            <div className="text-sm font-bold">{formatCurrency(0)}</div>
+                            <div className="text-sm font-bold">{formatCurrency(fixedAssets)}</div>
                         </div>
                     </div>
                 </div>
@@ -136,20 +160,25 @@ export const MobileAssets: React.FC = () => {
                         <h2 className="text-2xl font-bold dark:text-white">Dompet & Akun</h2>
                     </div>
                     
-                    {/* List item example from screenshot */}
-                    <div className="bg-slate-50 dark:bg-slate-900/50 rounded-3xl p-4 flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                            <div className="bg-primary-400 w-12 h-12 rounded-2xl flex items-center justify-center text-2xl">
-                                📱
+                    <div className="space-y-4">
+                        {state.wallets && state.wallets.length > 0 ? state.wallets.map(wallet => (
+                            <div key={wallet.id} className="bg-slate-50 dark:bg-slate-900/50 rounded-3xl p-4 flex items-center justify-between">
+                                <div className="flex items-center gap-4">
+                                    <div className="bg-primary-400 w-12 h-12 rounded-2xl flex items-center justify-center text-2xl">
+                                        {wallet.icon || '💰'}
+                                    </div>
+                                    <div>
+                                        <div className="font-bold dark:text-white">{wallet.name}</div>
+                                        <div className="text-xs text-slate-500">{wallet.type}</div>
+                                    </div>
+                                </div>
+                                <div className="text-right">
+                                    <div className="font-bold dark:text-white">{formatCurrency(wallet.balance)}</div>
+                                </div>
                             </div>
-                            <div>
-                                <div className="font-bold dark:text-white">GoPay</div>
-                                <div className="text-xs text-slate-500">Dompet Digital</div>
-                            </div>
-                        </div>
-                        <div className="text-right">
-                            <div className="font-bold dark:text-white">{formatCurrency(0)}</div>
-                        </div>
+                        )) : (
+                            <p className="text-center text-xs text-slate-400 py-4">Belum ada dompet terdaftar.</p>
+                        )}
                     </div>
                 </div>
             </div>

@@ -16,6 +16,7 @@ export interface Transaction {
   date: string; // ISO string
   description: string;
   relatedId?: string; // To link to a Goal, Bill, or Debt
+  walletId?: string; // Link to Wallet
 }
 
 export interface Category {
@@ -56,6 +57,14 @@ export interface AppNotification {
   type: 'info' | 'warning';
 }
 
+export interface Wallet {
+  id: string;
+  name: string;
+  type: 'Digital' | 'Bank' | 'Tunai';
+  balance: number;
+  icon?: string;
+}
+
 export interface AppState {
   isAuthenticated: boolean;
   transactions: Transaction[];
@@ -64,6 +73,7 @@ export interface AppState {
   goals: FinancialGoal[];
   bills: Bill[];
   debts: Debt[];
+  wallets: Wallet[];
   apiKey: string | null;
   notifications: AppNotification[];
 }

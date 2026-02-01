@@ -26,7 +26,7 @@ const defaultCategories: { income: any[]; expense: any[] } = {
     expense: [{ id: 'exp-1', name: 'Makanan & Minuman', type: 'expense' },{ id: 'exp-2', name: 'Transportasi', type: 'expense' },{ id: 'exp-3', name: 'Hiburan', type: 'expense' },{ id: 'exp-4', name: 'Belanja', type: 'expense' },{ id: 'exp-5', name: 'Kesehatan', type: 'expense' }]
 };
 const initialAppState: AppState = {
-    isAuthenticated: false, transactions: [], categories: [...defaultCategories.income, ...defaultCategories.expense], budgets: [], goals: [], bills: [], debts: [], apiKey: null, notifications: [],
+    isAuthenticated: false, transactions: [], categories: [...defaultCategories.income, ...defaultCategories.expense], budgets: [], goals: [], bills: [], debts: [], wallets: [{ id: 'w-1', name: 'GoPay', type: 'Digital', balance: 0, icon: '📱' }], apiKey: null, notifications: [],
 };
 
 type ColorScheme = 'light' | 'dark';
