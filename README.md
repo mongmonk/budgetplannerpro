@@ -1,9 +1,9 @@
 <div align="center">
-<img width="1200" height="475" alt="Financial Planner Pro Banner" src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=2071&auto=format&fit=crop" />
+<img width="1200" height="475" alt="Budget Planner Banner" src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=2071&auto=format&fit=crop" />
 
-# 💰 Financial Planner Pro
+# 💰 Budget Planner
 
-**Financial Planner Pro** adalah aplikasi manajemen keuangan pribadi modern yang dirancang untuk membantu Anda melacak transaksi, mengelola anggaran, dan merencanakan masa depan finansial Anda dengan bantuan AI.
+**Budget Planner** adalah aplikasi manajemen keuangan pribadi modern yang dirancang untuk membantu Anda melacak transaksi, mengelola anggaran, dan merencanakan masa depan finansial Anda dengan bantuan AI.
 
 [![React](https://img.shields.io/badge/React-19.2-blue?logo=react)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-6.2-646CFF?logo=vite)](https://vitejs.dev/)
@@ -37,7 +37,7 @@
 1.  **Clone repositori ini:**
     ```bash
     git clone <repository-url>
-    cd financial-planner-pro
+    cd budget-planner
     ```
 
 2.  **Instal dependensi:**

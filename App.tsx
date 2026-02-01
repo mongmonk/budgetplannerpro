@@ -162,7 +162,7 @@ export const App: React.FC = () => {
     const contextValue = useMemo(() => ({ state: appState, setState: setAppState, isTransactionModalOpen, setIsTransactionModalOpen, editingTransaction, setEditingTransaction, isHelpModalOpen, setIsHelpModalOpen, activeLayout, activeFont, activeAccent, colorScheme, setColorScheme, updateUserSettings }), [appState, isTransactionModalOpen, editingTransaction, isHelpModalOpen, activeLayout, activeFont, activeAccent, colorScheme]);
 
     if (loadingAuth || isCheckingStatus || isLoadingData) {
-        return <div className="flex justify-center items-center min-h-screen bg-slate-100 dark:bg-slate-900"><div className="flex flex-col items-center gap-4 text-center"><AppLogo className="h-24 w-24 animate-pulse-zoom" /><p className="text-lg font-semibold text-slate-600 dark:text-slate-300">Financial Planner Pro</p><p className="text-slate-500 dark:text-slate-400">Memuat data Anda...</p></div></div>;
+        return <div className="flex justify-center items-center min-h-screen bg-slate-100 dark:bg-slate-900"><div className="flex flex-col items-center gap-4 text-center"><AppLogo className="h-24 w-24 animate-pulse-zoom" /><p className="text-lg font-semibold text-slate-600 dark:text-slate-300">Budget Planner</p><p className="text-slate-500 dark:text-slate-400">Memuat data Anda...</p></div></div>;
     }
     if (!user) return <Login />;
     if (!isAccountActive) return <Activation user={user} onSuccess={() => setIsAccountActive(true)} />;

@@ -11,7 +11,7 @@ export const ChatAssistant: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const chatRef = useRef<Chat | null>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
-    const appName = 'Financial Planner Pro';
+    const appName = 'Budget Planner';
 
     const systemInstruction = `
         Anda adalah asisten AI 'Keuanganku', yang ramah, membantu, dan ahli dalam keuangan pribadi serta fitur aplikasi ini. Jawablah pertanyaan pengguna dalam Bahasa Indonesia.

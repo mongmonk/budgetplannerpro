@@ -19,8 +19,8 @@ export const MobileHeader: React.FC<{ title: string; subtitle?: string }> = ({ t
         <div className="px-6 pt-6 pb-2 flex justify-between items-start bg-white dark:bg-slate-900 transition-colors">
             <div>
                 <div className="flex items-center gap-2 mb-1">
-                    <div className="bg-primary-400 w-8 h-8 rounded flex items-center justify-center text-black font-bold text-lg">FPP</div>
-                    <span className="font-bold text-xl dark:text-white">Finance Planner Pro</span>
+                    <div className="bg-primary-400 w-8 h-8 rounded flex items-center justify-center text-black font-bold text-lg">BP</div>
+                    <span className="font-bold text-xl dark:text-white">Budget Planner</span>
                 </div>
                 <h1 className="text-3xl font-bold dark:text-white mt-4">{title}</h1>
                 {subtitle && <p className="text-slate-500 text-sm mt-1">{subtitle}</p>}
@@ -47,7 +47,7 @@ export const MobileNav: React.FC<{ currentPage: Page; setPage: (page: Page) => v
 
     const ExchangeIcon: React.FC<{className?: string}> = ({className}) => (
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-            <path d="m7 10 5-5 5 5"/><path d="m7 14 5 5 5-5"/>
+            <path d="m10 17-5-5 5-5"/><path d="m14 7 5 5-5 5"/>
         </svg>
     );
 

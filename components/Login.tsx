@@ -15,7 +15,7 @@ const GoogleIcon: React.FC = () => (
 
 export const Login: React.FC = () => {
     const [isProcessingRedirect, setIsProcessingRedirect] = useState(true);
-    const appName = 'Financial Planner Pro';
+    const appName = 'Budget Planner';
 
     useEffect(() => {
         const processRedirectResult = async () => {

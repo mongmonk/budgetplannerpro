@@ -1,7 +1,7 @@
 {
-  "name": "Financial Planner Pro",
+  "name": "Budget Planner",
   "short_name": "KeuanganKu",
-  "description": "Aplikasi perencana keuangan pribadi yang komprehensif untuk membantu pengguna mengelola pendapatan, pengeluaran, anggaran, dan tujuan keuangan dalam satu platform yang intuitif dan menarik.",
+  "description": "Aplikasi perencana anggaran pribadi yang komprehensif untuk membantu pengguna mengelola pendapatan, pengeluaran, anggaran, dan tujuan keuangan dalam satu platform yang intuitif and menarik.",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#f1f5f9",

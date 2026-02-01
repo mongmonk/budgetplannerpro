@@ -30,13 +30,13 @@ export const CalculatorIcon: React.FC<{className?: string}> = ({className}) => (
 export const PaletteIcon: React.FC<{className?: string}> = ({className}) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.667 0-.424-.16-.83-.437-1.14-1.568-1.794-2.204-4.056-1.556-6.225.43-1.42 1.26-2.66 2.38-3.53.53-.41 1.2-.63 1.95-.63.926 0 1.667.747 1.667 1.667 0 1.846-1.01 3.49-2.58 4.544-1.28 1.03-2.68 1.8-4.12 2.33-1.45.52-3.03.73-4.59.57-1.56-.16-3.13-.6-4.54-1.32"/></svg>);
 
 const logoDataUri = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSI2MCIgZmlsbD0iIzNCODJGNiIvPjxwYXRoIGQ9Ik0xMjggMzg0VjIyNCIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIzMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTIyNCAzODRWMTYwIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjMyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMzIwIDM4NFYyODgiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMzIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik00MTYgMzg0VjEyOCIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIzMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9zdmc+';
-export const AppLogo: React.FC<{className?: string}> = ({className}) => (<img src={logoDataUri} alt="Finance Planner Pro Logo" className={className} />);
+export const AppLogo: React.FC<{className?: string}> = ({className}) => (<img src={logoDataUri} alt="Budget Planner Logo" className={className} />);
 
 export const Header: React.FC<{ currentPage: Page; setPage: (page: Page) => void; onLogout: () => void; user: User; }> = ({ currentPage, setPage, onLogout, user }) => {
     const { setIsTransactionModalOpen, setIsHelpModalOpen } = useAppContext();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
-    const appName = 'Financial Planner Pro';
+    const appName = 'Budget Planner';
     const navItems: { page: Page; label: string; icon: React.FC<{className?:string}> }[] = [
         { page: 'dashboard', label: 'Dasbor', icon: HomeIcon },
         { page: 'transactions', label: 'Transaksi', icon: WalletIcon },
