@@ -51,11 +51,11 @@ export const MobileSettings: React.FC<{ onLogout: () => void; user: User | null 
     };
 
     const accents = [
-        { id: 'blue', className: 'bg-blue-500' },
-        { id: 'emerald', className: 'bg-emerald-500' },
-        { id: 'rose', className: 'bg-rose-500' },
-        { id: 'violet', className: 'bg-violet-500' },
-        { id: 'orange', className: 'bg-orange-500' }
+        { id: 'blue', className: 'bg-[#00ffff]' },
+        { id: 'emerald', className: 'bg-[#adff2f]' },
+        { id: 'rose', className: 'bg-[#ff007f]' },
+        { id: 'violet', className: 'bg-[#bf00ff]' },
+        { id: 'orange', className: 'bg-[#ffa500]' }
     ];
 
     const CategorySettings = () => {
