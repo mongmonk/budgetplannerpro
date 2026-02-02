@@ -45,9 +45,9 @@ export const MobileNav: React.FC<{ currentPage: Page; setPage: (page: Page) => v
         </svg>
     );
 
-    const ExchangeIcon: React.FC<{className?: string}> = ({className}) => (
+    const SignalBarIcon: React.FC<{className?: string}> = ({className}) => (
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-            <path d="m10 17-5-5 5-5"/><path d="m14 7 5 5-5 5"/>
+            <line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/>
         </svg>
     );
 
@@ -79,7 +79,7 @@ export const MobileNav: React.FC<{ currentPage: Page; setPage: (page: Page) => v
                             onClick={() => handleMenuClick('reports')}
                             className={`flex flex-col items-center gap-2 p-4 rounded-2xl transition-colors ${currentPage === 'reports' ? 'bg-primary-400 text-black' : 'bg-slate-800 text-white hover:bg-slate-700'}`}
                         >
-                            <ExchangeIcon className="w-6 h-6" />
+                            <SignalBarIcon className="w-6 h-6" />
                             <span className="text-xs font-bold">Analisis</span>
                         </button>
                         <button
@@ -120,7 +120,7 @@ export const MobileNav: React.FC<{ currentPage: Page; setPage: (page: Page) => v
 
                 {/* This icon in screenshot 1 is actually for Analysis/Exchange */}
                 <button onClick={() => setPage('reports')} className={`p-3 ${currentPage === 'reports' ? 'text-primary-400' : 'text-slate-400'}`}>
-                    <ExchangeIcon className="w-7 h-7" />
+                    <SignalBarIcon className="w-7 h-7" />
                 </button>
                 
                 {/* Menu button to access other pages */}
