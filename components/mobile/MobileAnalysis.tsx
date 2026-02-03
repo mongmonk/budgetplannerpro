@@ -9,7 +9,7 @@ export const MobileAnalysis: React.FC = () => {
     const { state } = useAppContext();
     const { transactions, budgets, categories } = state;
     const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7));
-    
+
     const getProgressBarColor = (value: number, max: number) => {
         if (max === 0) return 'bg-slate-400';
         const percentage = (value / max) * 100;
@@ -70,12 +70,12 @@ export const MobileAnalysis: React.FC = () => {
                         </div>
                     )}
                     {activeTab === 'zakat' && (
-                         <div className="space-y-4">
+                        <div className="space-y-4">
                             <div><label className="block text-xs font-bold text-slate-500 mb-1 uppercase tracking-widest">Penghasilan Bruto / Bulan</label><CurrencyInput value={monthlyIncomeZakat} onChange={setMonthlyIncomeZakat} placeholder="Rp 0" /></div>
                             <div><label className="block text-xs font-bold text-slate-500 mb-1 uppercase tracking-widest">Harga Emas / Gram</label><CurrencyInput value={goldPrice} onChange={setGoldPrice} placeholder="Rp 0" /></div>
-                             <Button onClick={handleCalculateZakat} className="w-full py-3 rounded-2xl">Hitung Zakat</Button>
-                             {zakatResult && <div className="mt-4 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl space-y-3"><div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-slate-500"><span>Batas Nishab:</span><span>{formatCurrency(zakatResult.nishab)}/thn</span></div><div className={`text-center font-bold py-2 rounded-xl text-xs ${zakatResult.isObligated ? 'text-green-600 bg-green-50 dark:bg-green-900/20' : 'text-yellow-600 bg-yellow-50 dark:bg-yellow-900/20'}`}>{zakatResult.isObligated ? "Wajib Zakat" : "Belum Wajib Zakat"}</div>{zakatResult.isObligated && <div className="pt-2 text-center"><h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Estimasi Zakat</h4><p className="text-2xl font-bold text-primary-500">{formatCurrency(zakatResult.zakatAmount)}</p><p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">per tahun</p></div>}</div>}
-                         </div>
+                            <Button onClick={handleCalculateZakat} className="w-full py-3 rounded-2xl">Hitung Zakat</Button>
+                            {zakatResult && <div className="mt-4 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl space-y-3"><div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-slate-500"><span>Batas Nishab:</span><span>{formatCurrency(zakatResult.nishab)}/thn</span></div><div className={`text-center font-bold py-2 rounded-xl text-xs ${zakatResult.isObligated ? 'text-green-600 bg-green-50 dark:bg-green-900/20' : 'text-yellow-600 bg-yellow-50 dark:bg-yellow-900/20'}`}>{zakatResult.isObligated ? "Wajib Zakat" : "Belum Wajib Zakat"}</div>{zakatResult.isObligated && <div className="pt-2 text-center"><h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Estimasi Zakat</h4><p className="text-2xl font-bold text-primary-500">{formatCurrency(zakatResult.zakatAmount)}</p><p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">per tahun</p></div>}</div>}
+                        </div>
                     )}
                 </div>
             </MobileCard>
@@ -104,24 +104,41 @@ export const MobileAnalysis: React.FC = () => {
 
     const COLORS = { 'Pengeluaran': '#ef4444', 'Tabungan': '#22c55e', 'Utang': '#3b82f6' };
 
+    // Custom Icons matching MobileDashboard
+    const DiamondIcon: React.FC<{ className?: string }> = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M6 3h12l4 6-10 12L2 9z" /></svg>);
+    const RocketIcon: React.FC<{ className?: string }> = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#a3e635" stroke="none" className={className}><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" /><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" /><path d="M9 12H4s.55-3.03 2-5c1.62-2.2 5-3 5-3" /><path d="M12 15v5s3.03-.55 5-2c2.2-1.62 3-5 3-5" /></svg>);
+
     return (
         <div className="pb-32 bg-slate-50 dark:bg-slate-900 min-h-screen transition-colors">
             <MobileHeader title="Analisis" subtitle="Laporan & Kalkulator" />
-            
+
             <div className="px-6 space-y-6 mt-4">
                 <div className="flex items-center justify-between">
                     <h2 className="text-xl font-bold dark:text-white">Pilih Bulan</h2>
                     <input type="month" value={selectedMonth} onChange={e => setSelectedMonth(e.target.value)} className="bg-white dark:bg-slate-800 border-none rounded-xl py-2 px-3 text-sm font-bold shadow-sm focus:ring-primary-500 dark:text-white" />
                 </div>
 
-                <MobileCard>
-                    <h2 className="text-lg font-bold mb-4 dark:text-white">Ringkasan</h2>
-                    <div className="space-y-3">
-                        <div className="flex justify-between items-center"><span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Pemasukan</span><span className="font-bold text-green-500">{formatCurrency(reportData.totalIncome)}</span></div>
-                        <div className="flex justify-between items-center"><span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Pengeluaran</span><span className="font-bold text-rose-500">{formatCurrency(reportData.totalExpense)}</span></div>
-                        <div className="flex justify-between items-center pt-3 border-t border-slate-100 dark:border-slate-700"><span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Sisa</span><span className={`font-bold text-lg ${reportData.balance >= 0 ? 'text-blue-500' : 'text-orange-500'}`}>{formatCurrency(reportData.balance)}</span></div>
+                {/* Hero Card - Summary Style (Simplified Structure) */}
+                <div className="bg-slate-900 rounded-[2.5rem] p-8 text-white shadow-xl relative overflow-hidden">
+                    <h2 className="text-lg font-bold mb-6 flex items-center gap-2">
+                        <DiamondIcon className="w-5 h-5 text-primary-400" />
+                        Ringkasan
+                    </h2>
+                    <div className="space-y-4">
+                        <div className="flex justify-between items-center">
+                            <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Pemasukan</span>
+                            <span className="font-bold text-green-400">{formatCurrency(reportData.totalIncome)}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Pengeluaran</span>
+                            <span className="font-bold text-rose-400">{formatCurrency(reportData.totalExpense)}</span>
+                        </div>
+                        <div className="flex justify-between items-center pt-4 border-t border-slate-700/50">
+                            <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Sisa Uang</span>
+                            <span className={`font-bold text-lg ${reportData.balance >= 0 ? 'text-primary-400' : 'text-orange-400'}`}>{formatCurrency(reportData.balance)}</span>
+                        </div>
                     </div>
-                </MobileCard>
+                </div>
 
                 <MobileCard>
                     <h2 className="text-lg font-bold mb-4 dark:text-white">Alokasi</h2>
@@ -133,7 +150,7 @@ export const MobileAnalysis: React.FC = () => {
                                         {reportData.allocationData.map((e, i) => <Cell key={`cell-${i}`} fill={COLORS[e.name as keyof typeof COLORS]} />)}
                                     </Pie>
                                     <Tooltip formatter={(v: number) => formatCurrency(v)} />
-                                    <Legend iconType="circle" wrapperStyle={{fontSize: "10px"}} />
+                                    <Legend iconType="circle" wrapperStyle={{ fontSize: "10px" }} />
                                 </PieChart>
                             </ResponsiveContainer>
                         </div>
